@@ -1,8 +1,6 @@
 const fetch = require('node-fetch');
 
 exports.sourceNodes = async ({ actions, createNodeId, createContentDigest }) => {
-    console.log('hello world');
-
     const { createNode } = actions;
 
     // Helper function that processes a result to match Gatsby's node structure

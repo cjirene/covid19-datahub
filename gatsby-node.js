@@ -74,79 +74,6 @@ exports.createPages = async ({ actions, graphql }) => {
   });
 };
 
-// function foreignListField({ type, field, fieldFrom, fieldTo, orderBy }) {
-//   console.log(type);
-//   fieldFrom = fieldFrom || field;
-//   fieldTo = fieldTo || field;
-//   return {
-//     type: `[${type}]`,
-//     resolve: (source, args, context, info) => {
-//       return context.nodeModel
-//         .getAllNodes({ type: type })
-//         .filter(d => d[fieldTo] === source[fieldFrom])
-//         .sort((da, db) => {
-//           return da[orderBy] < db[orderBy];
-//         });
-//     }
-//   };
-// }
-
-// function foreignEntityField({ type, field, fieldFrom, fieldTo }) {
-//   console.log(type);
-//   fieldFrom = fieldFrom || field;
-//   fieldTo = fieldTo || field;
-//   return {
-//     type: type,
-//     resolve: (source, args, context, info) => {
-//       return context.nodeModel
-//         .getAllNodes({ type: type })
-//         .find(d => d[fieldTo] === source[fieldFrom]);
-//     }
-//   };
-// }
-
-// exports.createSchemaCustomization = ({ actions, schema }) => {
-//   const { createTypes } = actions;
-//   function extendFields(type, fields) {
-//     return schema.buildObjectType({
-//       name: type,
-//       interfaces: ["Node"],
-//       fields: fields
-//     });
-//   }
-
-//   const typeDefs = [
-//     //"type area implements Node { institutes: [institute] }",
-//     extendFields("Area", {
-//       institutes: foreignListField({
-//         type: "Institute",
-//         field: "countryCode",
-//         orderBy: "name"
-//       })
-//       // updates: {
-//       //   type: '',
-//       //   resolve: (source, args, context, info) => {
-//       //     return context.nodeModel
-//       //       .getAllNodes({ type: type })
-//       //       .find(d => d[fieldTo] === source[fieldFrom]);
-//       //   }
-//       // },
-//       // updates: foreignListField({
-//       //   type: "Update",
-//       //   field: "countryCode",
-//       //   orderBy: "date"
-//       // })
-//     }),
-//     extendFields("Institute", {
-//       area: foreignEntityField({
-//         type: "Area",
-//         field: "countryCode"
-//       })
-//     })
-//   ];
-//   createTypes(typeDefs);
-// };
-
 exports.onCreateNode = ({ node, actions, getNode }) => {
   const { createNodeField, createPage } = actions;
   fmImagesToRelative(node); // convert image paths for gatsby images
@@ -155,7 +82,6 @@ exports.onCreateNode = ({ node, actions, getNode }) => {
       node.templateKey || `${_.kebabCase(node.internal.type)}-page`;
 
     const pathname = createFilePath({ node, getNode });
-    console.log(pathname, node.slug);
 
     const contextFn = path.resolve(`src/templates/${templateKey}-context.js`);
     let context = {};
@@ -191,7 +117,6 @@ exports.onCreateNode = ({ node, actions, getNode }) => {
     });
     const templateKey = node.frontmatter.templateKey ||
       `${_.kebabCase(pathname.split('/')[1])}-page`;
-    console.log('templateKey', templateKey);
     createNodeField({
       name: `templateKey`,
       node: node,

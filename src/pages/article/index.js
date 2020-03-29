@@ -3,7 +3,6 @@ import { makePage } from "../../components/Layout";
 import { graphql } from 'gatsby';
 
 const PageCore = ({ data }) => {
-  console.log(data);
   return <div>
     <h1>资料库</h1>
     {

@@ -1,14 +1,13 @@
 import React from "react";
 // import PropTypes from "prop-types";
-import ArticleRoll from "../components/ArticleRoll";
+// import ArticleRoll from "../components/ArticleRoll";
+import UpdateRoll from "../components/UpdateRoll";
 import { makePage } from "../components/Layout";
 import { graphql, Link } from "gatsby";
 
 export const IndexPageCore = ({ data, errors }) => {
-  console.log(data);
   const config = data.pageIndexYml;
   const getApiData = (apiSlug) => {
-    console.log('apisss', apiSlug);
     return data.allCovid19Country.edges.find(edge => {
       return edge.node.data.Slug === apiSlug;
     })?.node?.data;
@@ -19,11 +18,10 @@ export const IndexPageCore = ({ data, errors }) => {
         <h1>全球院校追踪</h1>
         <div>
           {config.highlightAreas.map(area => {
-            console.log(area);
             const apiData = getApiData(area.apiSlug);
             return (
-              <div>
-                <Link to={area.link} key={area.link}>
+              <div key={area.link}>
+                <Link to={area.link} >
                   {area.name}
                 </Link>
                 <div>累计: {apiData.TotalConfirmed}</div>
@@ -45,7 +43,7 @@ export const IndexPageCore = ({ data, errors }) => {
       </div>
       <div>
         <h1>全球资讯</h1>
-        <ArticleRoll />
+        <UpdateRoll />
       </div>
     </div>
   );

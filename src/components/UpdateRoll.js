@@ -1,7 +1,7 @@
 import { Link, graphql, StaticQuery } from "gatsby";
 import React from "react";
 
-const ArticleRoll = data => {
+const UpdateRoll = data => {
   const articles = data?.data?.allMarkdownRemark?.edges ?? [];
   return (
     <div>
@@ -20,10 +20,10 @@ const ArticleRoll = data => {
 export default () => (
   <StaticQuery
     query={graphql`
-      query ArticleRollQuery {
+      query UpdateRollQuery {
         allMarkdownRemark(
           sort: { order: DESC, fields: [frontmatter___date] }
-          filter: { frontmatter: { templateKey: { eq: "article-page" } } }
+          filter: { frontmatter: { templateKey: { eq: "update-page" } } }
         ) {
           edges {
             node {
@@ -51,7 +51,7 @@ export default () => (
       }
     `}
     render={data => {
-      return <ArticleRoll data={data} />;
+      return <UpdateRoll data={data} />;
     }}
   />
 );
