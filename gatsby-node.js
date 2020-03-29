@@ -1,5 +1,6 @@
 const _ = require("lodash");
 const path = require("path");
+const fs = require("fs");
 const { createFilePath } = require("gatsby-source-filesystem");
 const { fmImagesToRelative } = require("gatsby-remark-relative-images");
 
@@ -13,10 +14,10 @@ exports.createPages = async ({ actions, graphql }) => {
             id
             fields {
               pathname
+              templateKey
             }
             frontmatter {
               tags
-              templateKey
             }
           }
         }
@@ -33,11 +34,13 @@ exports.createPages = async ({ actions, graphql }) => {
 
   posts.forEach(edge => {
     const id = edge.node.id;
+    const pathname = edge.node.fields.pathname;
+    const templateKey = edge.node.fields.templateKey;
     createPage({
-      path: edge.node.fields.pathname,
+      path: pathname,
       tags: edge.node.frontmatter.tags,
       component: path.resolve(
-        `src/templates/${String(edge.node.frontmatter.templateKey)}.js`
+        `src/templates/${templateKey}.js`
       ),
       // additional data can be passed via context
       context: {
@@ -153,30 +156,46 @@ exports.onCreateNode = ({ node, actions, getNode }) => {
 
     const pathname = createFilePath({ node, getNode });
     console.log(pathname, node.slug);
+
+    const contextFn = path.resolve(`src/templates/${templateKey}-context.js`);
+    let context = {};
+    if (fs.existsSync(contextFn)) {
+      const makeContext = require(contextFn);
+      context = makeContext(node);
+    }
+
     createPage({
       path: pathname,
       // tags: edge.node.frontmatter.tags,
       component: path.resolve(`src/templates/${templateKey}.js`),
       // additional data can be passed via context
-      context: {
+      context: Object.assign({
         id: node.id,
-        countryCode: node.countryCode,
-        instituteSlug: node.instituteSlug,
-        slug: node.slug
-      }
+        // countryCode: node.countryCode,
+        // instituteSlug: node.instituteSlug,
+        // slug: node.slug
+      }, context),
     });
     createNodeField({
-      node,
+      node: node,
       name: `pathname`,
       value: pathname
     });
   }
   if (node.internal.type === `MarkdownRemark`) {
-    const value = createFilePath({ node, getNode });
+    const pathname = createFilePath({ node, getNode });
     createNodeField({
       name: `pathname`,
-      node,
-      value
+      node: node,
+      value: pathname
+    });
+    const templateKey = node.frontmatter.templateKey ||
+      `${_.kebabCase(pathname.split('/')[1])}-page`;
+    console.log('templateKey', templateKey);
+    createNodeField({
+      name: `templateKey`,
+      node: node,
+      value: templateKey
     });
   }
 

@@ -7,25 +7,40 @@ import { graphql, Link } from "gatsby";
 export const IndexPageCore = ({ data, errors }) => {
   console.log(data);
   const config = data.pageIndexYml;
+  const getApiData = (apiSlug) => {
+    console.log('apisss', apiSlug);
+    return data.allCovid19Country.edges.find(edge => {
+      return edge.node.data.Slug === apiSlug;
+    })?.node?.data;
+  }
   return (
     <div>
       <div>
         <h1>全球院校追踪</h1>
         <div>
           {config.highlightAreas.map(area => {
+            console.log(area);
+            const apiData = getApiData(area.apiSlug);
             return (
-              <Link to={area.link} key={area.link}>
-                {area.name}
-              </Link>
+              <div>
+                <Link to={area.link} key={area.link}>
+                  {area.name}
+                </Link>
+                <div>累计: {apiData.TotalConfirmed}</div>
+                <div>最新: {apiData.NewConfirmed}</div>
+              </div>
             );
           })}
         </div>
       </div>
       <div>
-        <a href="/">
-          <div>资料区</div>
+        <div>
+          <Link to='/article'>
+
+            资料区
+          </Link>
           <div>政策汇总</div>
-        </a>
+        </div>
         <a href="/">留学生问题征集</a>
       </div>
       <div>
@@ -40,21 +55,34 @@ const Page = makePage(IndexPageCore);
 export default Page;
 
 export const pageQuery = graphql`
-  query IndedxPage {
+  query IndedxPage($apiSlugs: [String]) {
     pageIndexYml {
       highlightAreas {
         name
         link
+        apiSlug
       }
     }
-    covid19Summary(Countries: { elemMatch: { TotalConfirmed: { gt: 0 } } }) {
-      Countries {
-        Country
-        NewConfirmed
-        TotalConfirmed
-        Slug
-        NewDeaths
+    allCovid19Country(filter: {data: {Slug: {in: $apiSlugs}}}) {
+      edges {
+        node {
+          data {
+            Country
+            Slug
+            NewConfirmed
+            TotalConfirmed
+          }
+        }
       }
     }
+    # covid19Summary(Countries: { elemMatch: { TotalConfirmed: { gt: 0 } } }) {
+    #   Countries {
+    #     Country
+    #     NewConfirmed
+    #     TotalConfirmed
+    #     Slug
+    #     NewDeaths
+    #   }
+    # }
   }
 `;

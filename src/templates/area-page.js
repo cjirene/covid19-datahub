@@ -3,7 +3,7 @@ import { graphql, Link } from "gatsby";
 import { makePage } from "../components/Layout";
 
 export const AreaPageCore = ({ data }) => {
-  const { area, allInstitute, allMarkdownRemark } = data;
+  const { area, allInstitute, updates, articles } = data;
   return (
     <div>
       <div>
@@ -19,7 +19,17 @@ export const AreaPageCore = ({ data }) => {
         );
       })}
       <h2>资讯</h2>
-      {allMarkdownRemark.edges.map(edge => {
+      {updates.edges.map(edge => {
+        return (
+          <div key={edge.node.id}>
+            <Link to={edge.node.fields.pathname}>
+              {edge.node.frontmatter.title}
+            </Link>
+          </div>
+        );
+      })}
+      <h2>资料</h2>
+      {articles.edges.map(edge => {
         return (
           <div key={edge.node.id}>
             <Link to={edge.node.fields.pathname}>
@@ -55,11 +65,35 @@ export const pageQuery = graphql`
         }
       }
     }
-    allMarkdownRemark(
+    updates: allMarkdownRemark(
       filter: {
+        fields: {
+          templateKey: { eq: "update-page" }
+        }
         frontmatter: {
           countryCode: { eq: $countryCode }
-          templateKey: { eq: "update-page" }
+        }
+      }
+    ) {
+      edges {
+        node {
+          id
+          fields {
+            pathname
+          }
+          frontmatter {
+            title
+          }
+        }
+      }
+    }
+    articles: allMarkdownRemark(
+      filter: {
+        fields: {
+          templateKey: { eq: "article-page" }
+        }
+        frontmatter: {
+          countryCode: { eq: $countryCode }
         }
       }
     ) {

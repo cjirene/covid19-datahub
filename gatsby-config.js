@@ -1,7 +1,7 @@
 function toCamelCase(str) {
   return str
     .toLowerCase()
-    .replace(/(?:(^.)|(\s+.)|(\..)|(\/.))/g, function(match) {
+    .replace(/(?:(^.)|(\s+.)|(\..)|(\/.))/g, function (match) {
       return match.charAt(match.length - 1).toUpperCase();
     });
 }
@@ -16,6 +16,7 @@ module.exports = {
     // "gatsby-plugin-optional-chaining",
     "gatsby-plugin-react-helmet",
     "gatsby-plugin-sass",
+    'covidapi',
     {
       resolve: `gatsby-transformer-yaml`,
       options: {
@@ -30,22 +31,6 @@ module.exports = {
           console.log("Unknown Yaml: ", node, object);
           return "Yaml";
         }
-      }
-    },
-    {
-      resolve: "gatsby-source-multi-api",
-      options: {
-        apis: [
-          "https://api.covid19api.com/summary"
-          // {
-          //   prefix: "Covid19",
-          //   baseUrl: "https://api.covid19api.com/summary"
-          // }
-          // {
-          //   prefix: "BingCovid19",
-          //   baseUrl: "https://bing.com/covid/data"
-          // }
-        ]
       }
     },
     {
