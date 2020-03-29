@@ -10,7 +10,7 @@ const ArticleRoll = data => {
       {articles.map(artData => {
         const art = artData?.node?.frontmatter;
         return (
-          <Link key={artData?.id} to={artData?.node?.fields?.slug}>
+          <Link key={artData?.id} to={artData?.node?.fields?.pathname}>
             <h2>{art?.title}</h2>
           </Link>
         );
@@ -32,7 +32,7 @@ export default () => (
               excerpt(pruneLength: 400)
               id
               fields {
-                slug
+                pathname
               }
               frontmatter {
                 title

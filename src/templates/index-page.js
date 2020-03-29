@@ -1,13 +1,25 @@
 import React from "react";
 // import PropTypes from "prop-types";
 import ArticleRoll from "../components/ArticleRoll";
-// import { Link, graphql } from "gatsby";
+import { makePage } from "../components/Layout";
+import { graphql, Link } from "gatsby";
 
-export const IndexPageTemplate = () => {
+export const IndexPageCore = ({ data, errors }) => {
+  console.log(data);
+  const config = data.pageIndexYml;
   return (
     <div>
       <div>
         <h1>全球院校追踪</h1>
+        <div>
+          {config.highlightAreas.map(area => {
+            return (
+              <Link to={area.link} key={area.link}>
+                {area.name}
+              </Link>
+            );
+          })}
+        </div>
       </div>
       <div>
         <a href="/">
@@ -24,17 +36,25 @@ export const IndexPageTemplate = () => {
   );
 };
 
-const IndexPage = ({ data }) => {
-  // const { frontmatter } = data.markdownRemark;
-  return <IndexPageTemplate />;
-};
+const Page = makePage(IndexPageCore);
+export default Page;
 
-// IndexPage.propTypes = {
-//   data: PropTypes.shape({
-//     markdownRemark: PropTypes.shape({
-//       frontmatter: PropTypes.object
-//     })
-//   })
-// };
-
-export default IndexPage;
+export const pageQuery = graphql`
+  query IndedxPage {
+    pageIndexYml {
+      highlightAreas {
+        name
+        link
+      }
+    }
+    covid19Summary(Countries: { elemMatch: { TotalConfirmed: { gt: 0 } } }) {
+      Countries {
+        Country
+        NewConfirmed
+        TotalConfirmed
+        Slug
+        NewDeaths
+      }
+    }
+  }
+`;

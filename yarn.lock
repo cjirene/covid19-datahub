@@ -6469,6 +6469,11 @@ gatsby-source-filesystem@^2.0.26:
     valid-url "^1.0.9"
     xstate "^4.7.2"
 
+gatsby-source-multi-api@^1.0.3:
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/gatsby-source-multi-api/-/gatsby-source-multi-api-1.0.3.tgz#1b502cc1efeb2187c67a623d82905a2445bf80fa"
+  integrity sha512-J3wdfqh+zK6AxNYEJLSA+Pv+D5wOM/cZl066d6zyVWxqPNWwJFtY1jrq0LzJl/02bBiICv1oPF4XGrpgtaBJlA==
+
 gatsby-telemetry@^1.1.55:
   version "1.1.55"
   resolved "https://registry.yarnpkg.com/gatsby-telemetry/-/gatsby-telemetry-1.1.55.tgz#a450cd56cd35ff1ca7c9658349c6c6673a5410a1"

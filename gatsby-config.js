@@ -22,7 +22,7 @@ module.exports = {
         typeName: ({ node, object, isArray }) => {
           if (node.sourceInstanceName === "data") {
             const p = node.relativePath;
-            return p.split("/")[0];
+            return toCamelCase(p.split("/")[0]);
           }
           if (node.sourceInstanceName === "pages") {
             return toCamelCase(`Page/${node.relativePath}`);
@@ -30,6 +30,22 @@ module.exports = {
           console.log("Unknown Yaml: ", node, object);
           return "Yaml";
         }
+      }
+    },
+    {
+      resolve: "gatsby-source-multi-api",
+      options: {
+        apis: [
+          "https://api.covid19api.com/summary"
+          // {
+          //   prefix: "Covid19",
+          //   baseUrl: "https://api.covid19api.com/summary"
+          // }
+          // {
+          //   prefix: "BingCovid19",
+          //   baseUrl: "https://bing.com/covid/data"
+          // }
+        ]
       }
     },
     {

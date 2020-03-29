@@ -7,8 +7,8 @@ class TagRoute extends React.Component {
   render() {
     const posts = this.props.data.allMarkdownRemark.edges;
     const postLinks = posts.map(post => (
-      <li key={post.node.fields.slug}>
-        <Link to={post.node.fields.slug}>
+      <li key={post.node.fields.pathname}>
+        <Link to={post.node.fields.pathname}>
           <h2 className="is-size-2">{post.node.frontmatter.title}</h2>
         </Link>
       </li>
@@ -62,7 +62,7 @@ export const tagPageQuery = graphql`
       edges {
         node {
           fields {
-            slug
+            pathname
           }
           frontmatter {
             title
